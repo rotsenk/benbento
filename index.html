@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/me-nestor.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
+    <meta
+      name="description"
+      content="Nestor Rivas’ personal bento: specialty, experience, music, shows and hobbies."
+    />
+    <title>Nestor Rivas | Frontend Developer</title>
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var fromUrl = params.get('lang');
+        var stored = null;
+
+        try {
+          stored = window.localStorage.getItem('bento.locale');
+        } catch (error) {
+          stored = null;
+        }
+
+        var locale =
+          fromUrl === 'es' || fromUrl === 'en'
+            ? fromUrl
+            : stored === 'es' || stored === 'en'
+              ? stored
+              : (navigator.language || '').toLowerCase().indexOf('es') === 0
+                ? 'es'
+                : 'en';
+
+        var copy = {
+          es: {
+            title: 'Nestor Rivas | Frontend Developer',
+            description:
+              'Bento personal de Nestor Rivas: especialidad, trayectoria, música, series y hobbies.',
+          },
+          en: {
+            title: 'Nestor Rivas | Frontend Developer',
+            description:
+              'Nestor Rivas’ personal bento: specialty, experience, music, shows and hobbies.',
+          },
+        }[locale];
+
+        document.documentElement.lang = locale;
+        document.title = copy.title;
+
+        var description = document.querySelector('meta[name="description"]');
+        if (description) description.setAttribute('content', copy.description);
+      })();
+    </script>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('bento.theme');
+          var theme =
+            stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system';
+          var effective =
+            theme === 'system' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : theme;
+          document.documentElement.dataset.theme =
+            effective === 'dark' ? 'dark' : 'light';
+        } catch (error) {
+          document.documentElement.dataset.theme = window.matchMedia(
+            '(prefers-color-scheme: dark)',
+          ).matches
+            ? 'dark'
+            : 'light';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
